@@ -14,10 +14,6 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    diets: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-      allowNull: true,
-    },
     image: {
       type: DataTypes.STRING,
       allowNull: false,
