@@ -11,6 +11,7 @@ module.exports = (sequelize) => {
         allowNull: false,
         primaryKey: true,
         autoIncrement: true,
+        
       },
       instructions: {
         type: DataTypes.STRING(2000),

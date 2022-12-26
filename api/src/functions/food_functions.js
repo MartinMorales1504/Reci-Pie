@@ -233,35 +233,40 @@ const importAllData = async () => {
         summary: rec.summary,
       },
     });
-    rec.cuisines.map(async (eachCuisine) => {
+    rec.cuisines.forEach(async (eachCuisine) => {
       let toAddCuisine = await Cuisine.findOne({
         where: { name: eachCuisine },
       });
       await recipe.addCuisine(toAddCuisine);
     });
-    rec.dishTypes.map(async (eachDishType) => {
+    rec.dishTypes.forEach(async (eachDishType) => {
       let toAddDishType = await DishType.findOne({
         where: { name: eachDishType },
       });
       await recipe.addDishType(toAddDishType);
     });
-    rec.diets.map(async (eachCDiet) => {
+    rec.diets.forEach(async (eachCDiet) => {
       let toAddDiet = await Diet.findOne({
         where: { name: eachCDiet },
       });
       await recipe.addDiet(toAddDiet);
     });
-    rec.ocassions?.map(async (eachOcassion) => {
+    rec.ocassions?.forEach(async (eachOcassion) => {
       let toAddOcassion = await Ocassion.findOne({
         where: { name: eachOcassion },
       });
       await recipe.addCuisine(toAddOcassion);
     });
-    
+    rec.analyzedInstructions[0]?.steps?.forEach(async (eachStep) => {
+      let toAddStep = await Step.findOne({
+        where: { name: eachStep.step },
+      });
+      await recipe.addStep(toAddStep);
+    });
   });
 };
 
-``
+
 // GET FILTERED RECIPIES
 const getRecipesByFilter = async (readyInMinutes, servings, title, diets) => {
   let recipes = await Recipe.findAll()
