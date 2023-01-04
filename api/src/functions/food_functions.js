@@ -1,6 +1,16 @@
 const axios = require("axios");
+const { Op } = require("sequelize");
 
-const { Recipe, Diet, Cuisine, DishType, Ocassion, Step, Ingredient, Equipment } = require("../db");
+const {
+  Recipe,
+  Diet,
+  Cuisine,
+  DishType,
+  Ocassion,
+  Step,
+  Ingredient,
+  Equipment,
+} = require("../db");
 
 const API_KEY = "c3156f4fb99744ec932f43f5be2839ea";
 
@@ -105,31 +115,30 @@ const initialCreateOcassions = (recipes) => {
   return ocassions;
 };
 
-
 // CREATE ALL INITIAL INGREDIENTS
 const initialCreateIngredients = (recipes) => {
   let ingredients = [];
   recipes?.forEach((rec) => {
     rec.analyzedInstructions[0]?.steps?.forEach((step) => {
       step?.ingredients?.forEach((eachIngredient) => {
-        if(!ingredients.includes(eachIngredient)) ingredients.push(eachIngredient)
-      })
-    })
-  })
+        if (!ingredients.includes(eachIngredient))
+          ingredients.push(eachIngredient);
+      });
+    });
+  });
 
   ingredients?.forEach(async (eachIngredient) => {
     const [ingredient, ingredientCreated] = await Ingredient.findOrCreate({
       where: {
-        name: eachIngredient.name
+        name: eachIngredient.name,
       },
-      defaults:{
-        name: eachIngredient.name
-      }
+      defaults: {
+        name: eachIngredient.name,
+      },
     });
   });
-  return ingredients
-}
-
+  return ingredients;
+};
 
 // CREATE ALL INITIAL EQUIPMENT
 const initialCreateEquipment = (recipes) => {
@@ -137,37 +146,39 @@ const initialCreateEquipment = (recipes) => {
   recipes?.forEach((rec) => {
     rec?.analyzedInstructions[0]?.steps?.forEach((step) => {
       step.equipment?.forEach((eachEquipment) => {
-        if(!allEquipment.includes(eachEquipment)) allEquipment.push(eachEquipment)
-      })
-    })
-  })
+        if (!allEquipment.includes(eachEquipment))
+          allEquipment.push(eachEquipment);
+      });
+    });
+  });
 
   allEquipment.forEach(async (eachEquipment) => {
     const [equipment, equipmentCreated] = await Equipment.findOrCreate({
       where: {
-        name: eachEquipment.name
+        name: eachEquipment.name,
       },
-      defaults:{
-        name: eachEquipment.name
-      }
+      defaults: {
+        name: eachEquipment.name,
+      },
     });
   });
-  return allEquipment
-}
+  return allEquipment;
+};
 
 // CREATE ALL INITIAL STEPS FOR RECIPES
 const initialCreateSteps = (recipes) => {
   let allSteps = [];
   recipes?.forEach((rec) => {
     rec.analyzedInstructions[0]?.steps?.forEach((step) => {
-      if(!allSteps.includes(step.step)) allSteps.push({
-        step: step.step,
-        ingredients: step.ingredients,
-        equipment: step.equipment,
-        number: step.number,
-      })
-    })
-  })
+      if (!allSteps.includes(step.step))
+        allSteps.push({
+          step: step.step,
+          ingredients: step.ingredients,
+          equipment: step.equipment,
+          number: step.number,
+        });
+    });
+  });
 
   allSteps.forEach(async (eachStep) => {
     const [step, stepCreated] = await Step.findOrCreate({
@@ -176,7 +187,7 @@ const initialCreateSteps = (recipes) => {
       },
       defaults: {
         instructions: eachStep.step,
-        number: eachStep.number
+        number: eachStep.number,
       },
     });
 
@@ -184,29 +195,28 @@ const initialCreateSteps = (recipes) => {
       // console.log('eachStep: ', eachStep)
       // console.log('Ingredient Name: ', eachIngredient.name)
       let toAddIngredient = await Ingredient.findOne({
-        where: {name: eachIngredient.name}
+        where: { name: eachIngredient.name },
       });
       await step.addIngredient(toAddIngredient);
-    })
+    });
 
-      eachStep?.equipment?.forEach(async (eachEquipment) => {
-        // console.log('eachStep: ', eachStep)
-        console.log('Equipment Name: ', eachEquipment.name)
-        let toAddEquipment = await Equipment.findOne({
-          where: {name: eachEquipment.name}
-        });
-        await step.addEquipment(toAddEquipment);
-      })
+    eachStep?.equipment?.forEach(async (eachEquipment) => {
+      // console.log('eachStep: ', eachStep)
+      let toAddEquipment = await Equipment.findOne({
+        where: { name: eachEquipment.name },
+      });
+      await step.addEquipment(toAddEquipment);
+    });
   });
 
   return allSteps;
-}
+};
 
 // CREATE DATABASE FROM FOOD API
 const importAllData = async () => {
   // if (!apiInfo.length) {
   let apiInfo = await getFood();
-  
+
   let allIngredients = initialCreateIngredients(apiInfo);
   let allEquipment = initialCreateEquipment(apiInfo);
   let allDiets = initialCreateDiet(apiInfo);
@@ -214,7 +224,6 @@ const importAllData = async () => {
   let allOcassions = initialCreateOcassions(apiInfo);
   let allDishTypes = initialCreateDishTypes(apiInfo);
   let allSteps = initialCreateSteps(apiInfo);
-
 
   apiInfo.forEach(async (rec) => {
     const [recipe, recipeCreated] = await Recipe.findOrCreate({
@@ -259,51 +268,86 @@ const importAllData = async () => {
     });
     rec.analyzedInstructions[0]?.steps?.forEach(async (eachStep) => {
       let toAddStep = await Step.findOne({
-        where: { name: eachStep.step },
+        where: { instructions: eachStep.step },
       });
       await recipe.addStep(toAddStep);
     });
   });
 };
 
-
 // GET FILTERED RECIPIES
 const getRecipesByFilter = async (readyInMinutes, servings, title, diets) => {
-  let recipes = await Recipe.findAll()
-  // ver contains
-  return recipes
-}
+  let recipes = await Recipe.findAll({
+    where: {
+      readyInMinutes: {
+        [Op.gte]: readyInMinutes,
+      },
+      servings: {
+        [Op.gte]: servings,
+      },
+      title: {
+        [Op.iLike]: `%${title}%`,
+      },
+    },
+    include: [
+      {
+        model: Cuisine,
+        attributes: ["name"],
+        through: { attributes: [] },
+      },
+      {
+        model: Diet,
+        attributes: ["name"],
+        through: { attributes: [] },
+      },
+      {
+        model: DishType,
+        attributes: ["name"],
+        through: { attributes: [] },
+      },
+      {
+        model: Ocassion,
+        attributes: ["name"],
+        through: { attributes: [] },
+      },
+    ],
+  });
+
+  return recipes;
+};
 
 // GET RECIPE BY ID
 const getRecipeById = async (id) => {
-let recipe = await Recipe.findByPk(id, {
-  include:[
-    {
-      model: Cuisine,
-      attributes: ['name'],
-      through: {attributes: []},
-    },    {
-      model: Diet,
-      attributes: ['name'],
-      through: {attributes: []},
-    },    {
-      model: DishType,
-      attributes: ['name'],
-      through: {attributes: []},
-    },    {
-      model: Ocassion,
-      attributes: ['name'],
-      through: {attributes: []},
-    },
-  ]
-})
-return recipe
-}
-
+  let recipe = await Recipe.findByPk(id, {
+    include: [
+      {
+        model: Cuisine,
+        attributes: ["name"],
+        through: { attributes: [] },
+      },
+      {
+        model: Diet,
+        attributes: ["name"],
+        through: { attributes: [] },
+      },
+      {
+        model: DishType,
+        attributes: ["name"],
+        through: { attributes: [] },
+      },
+      {
+        model: Ocassion,
+        attributes: ["name"],
+        through: { attributes: [] },
+      },
+    ],
+  });
+  return recipe;
+};
 
 module.exports = {
   getFood,
   importAllData,
   getRecipeById,
-  getRecipesByFilter
+  getRecipesByFilter,
 };
