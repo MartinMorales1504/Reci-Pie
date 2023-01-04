@@ -15,7 +15,24 @@ recipes.get("/import", async (req, res) => {
   }
 });
 
+recipes.get("/filter", async (req, res) => {
+  let { readyInMinutes, servings, title, diets } = req.query;
+  console.log(title)
+  console.log(readyInMinutes)
+  console.log(servings)
+  if(!readyInMinutes) readyInMinutes = 0
+  if(!servings) servings = 0
+  
+  try {
+    const filteredRecipies = await functions.getRecipesByFilter(readyInMinutes, servings, title, diets)
+    res.send(filteredRecipies)
+  } catch (error) {
+    res.status(404).send(error.message);
+  }
+})
+
 recipes.get("/:id", async (req, res) => {
+
   const { id } = req.params;
   try {
     const recipe = await functions.getRecipeById(id * 1);
@@ -24,5 +41,8 @@ recipes.get("/:id", async (req, res) => {
     res.status(404).send(error.message);
   }
 });
+
+
+
 
 module.exports = recipes;
