@@ -12,10 +12,10 @@ module.exports = (sequelize) => {
         primaryKey: true,
         autoIncrement: true,
       },
-      userName: {
+      fullName: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
+        unique: false,
       },
       email: {
         type: DataTypes.STRING,
@@ -25,7 +25,7 @@ module.exports = (sequelize) => {
       password: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
+        unique: false,
       },
       vegan: {
         type: DataTypes.BOOLEAN,
@@ -35,15 +35,15 @@ module.exports = (sequelize) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false
       },
-      //Gluten free
+      // Gluten free
       celiac: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
       },
-      lactoseIntolerant: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false
-      },
+      // lactoseIntolerant: {
+      //   type: DataTypes.BOOLEAN,
+      //   defaultValue: false
+      // },
     },
     {
       timestamps: false,
