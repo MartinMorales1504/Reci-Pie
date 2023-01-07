@@ -5,12 +5,12 @@ const functions = require("../../functions/user_functions");
 
 const users = Router();
 
-users.get("/", async (req, res) => {
-  let { fullName, email, password, vegan, vegetarian, celiac } = req.body;
-
+users.post("/create", async (req, res) => {
+  let { name, lastName, email, password, vegan, vegetarian, celiac } = req.body;
   try {
     const newUser = await functions.createUser(
-      fullName,
+      name,
+      lastName,
       email,
       password,
       vegan,
