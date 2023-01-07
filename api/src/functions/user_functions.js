@@ -15,20 +15,22 @@ const {
 
 // CREAR USUARIO
 const createUser = async (
-  fullName,
+  name,
+  lastName,
   email,
   password,
   vegan,
   vegetarian,
   celiac
 ) => {
-  if (fullName && email && password) {
+  if (name && lastName && email && password) {
     const [newUser, created] = await User.findOrCreate({
       where: {
         email: email,
       },
       defaults: {
-        fullName: fullName,
+        name: name,
+        lastName: lastName,
         email: email,
         password: password,
         vegan: vegan,
@@ -37,7 +39,7 @@ const createUser = async (
       },
     });
     if (created) {
-      return `Ùser ${fullName} created successfully`;
+      return `User ${name} ${lastName} created successfully`;
     } else {
       return "The user cannot be created with those data";
     }
