@@ -16,15 +16,15 @@ recipes.get("/import", async (req, res) => {
 });
 
 recipes.get("/filter", async (req, res) => {
-  let { readyInMinutes, servings, title, diets } = req.query;
-  console.log(title)
-  console.log(readyInMinutes)
-  console.log(servings)
-  if(!readyInMinutes) readyInMinutes = 0
+  let { MaxreadyInMinutes, MinreadyInMinutes, servings, title} = req.query;
+  let {diets} = req.body
+  if(!MinreadyInMinutes) MinreadyInMinutes = 0
+  if(!MaxreadyInMinutes) MaxreadyInMinutes = 99999
   if(!servings) servings = 0
+  if(!title) title = ''
   
   try {
-    const filteredRecipies = await functions.getRecipesByFilter(readyInMinutes, servings, title, diets)
+    const filteredRecipies = await functions.getRecipesByFilter( MaxreadyInMinutes, MinreadyInMinutes, servings, title, diets)
     res.send(filteredRecipies)
   } catch (error) {
     res.status(404).send(error.message);
