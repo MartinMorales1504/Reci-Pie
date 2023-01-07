@@ -276,11 +276,11 @@ const importAllData = async () => {
 };
 
 // GET FILTERED RECIPIES
-const getRecipesByFilter = async (readyInMinutes, servings, title, diets) => {
+const getRecipesByFilter = async (MaxreadyInMinutes, MinreadyInMinutes, servings, title, diets) => {
   let recipes = await Recipe.findAll({
     where: {
       readyInMinutes: {
-        [Op.gte]: readyInMinutes,
+        [Op.between]: [MinreadyInMinutes, MaxreadyInMinutes],
       },
       servings: {
         [Op.gte]: servings,
@@ -313,6 +313,28 @@ const getRecipesByFilter = async (readyInMinutes, servings, title, diets) => {
     ],
   });
 
+  if(diets.length) {
+    recipes = recipes.filter( recipe => {
+
+      let included = ''
+      let recipeDiets = recipe.diets.map(diet => {
+        return diet['name']
+      })
+
+    for(let x = 0; x < diets.length; x++){
+      if (recipeDiets.toString('').includes(diets[x])){
+        included = true
+      } else {
+        included = false
+        break
+      }
+    }
+    if(included) {
+      return true
+    } else return false
+    })
+  }
+  
   return recipes;
 };
 
