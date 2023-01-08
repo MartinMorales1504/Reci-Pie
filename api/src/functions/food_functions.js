@@ -17,7 +17,7 @@ const API_KEY = "c3156f4fb99744ec932f43f5be2839ea";
 // IMPORT API DATA
 const getFood = async () => {
   const info = await axios.get(
-    `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=5`
+    `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=100`
   );
 
   return info.data.results;
@@ -181,31 +181,31 @@ const initialCreateSteps = (recipes) => {
   });
 
   allSteps.forEach(async (eachStep) => {
-    const [step, stepCreated] = await Step.findOrCreate({
-      where: {
+    const step = await Step.create({
         instructions: eachStep.step,
-      },
-      defaults: {
-        instructions: eachStep.step,
-        number: eachStep.number,
-      },
+        number: eachStep.number ? eachStep.number : 1,
     });
 
     eachStep?.ingredients?.forEach(async (eachIngredient) => {
-      // console.log('eachStep: ', eachStep)
-      // console.log('Ingredient Name: ', eachIngredient.name)
       let toAddIngredient = await Ingredient.findOne({
         where: { name: eachIngredient.name },
       });
-      await step.addIngredient(toAddIngredient);
+      try {
+        await step.addIngredient(toAddIngredient);
+      } catch (error) {
+         console.log('ingredietns', eachStep)        
+      }
     });
 
     eachStep?.equipment?.forEach(async (eachEquipment) => {
-      // console.log('eachStep: ', eachStep)
       let toAddEquipment = await Equipment.findOne({
         where: { name: eachEquipment.name },
       });
-      await step.addEquipment(toAddEquipment);
+      try {
+        await step.addEquipment(toAddEquipment);
+      } catch (error) {
+        console.log('equipment', eachStep)
+      }
     });
   });
 
@@ -273,6 +273,7 @@ const importAllData = async () => {
       await recipe.addStep(toAddStep);
     });
   });
+  return 
 };
 
 // GET FILTERED RECIPIES
