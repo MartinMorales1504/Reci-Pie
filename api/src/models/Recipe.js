@@ -24,19 +24,21 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    sustainable: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-    },
+    // sustainable: {
+    //   type: DataTypes.BOOLEAN,
+    //   allowNull: false,
+    // },
     likes: {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 0
     },
-    healthScore: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
+    // healthScore: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull: false
+    // },
+
+    // Author credits
     creditsText: {
       type: DataTypes.STRING,
       allowNull: false  
