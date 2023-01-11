@@ -42,6 +42,17 @@ recipes.get("/:id", async (req, res) => {
   }
 });
 
+recipes.post("/create", async (req, res) => {
+  const { instructions, number, ingredients, equipments } = req.body
+
+  try {
+    const step = await functions.createStep(instructions, number, ingredients, equipments)
+    res.send(step)
+  } catch (error) {
+    res.status(404).send(error.message);
+  }
+})
+
 
 
 
