@@ -16,44 +16,70 @@ recipes.get("/import", async (req, res) => {
 });
 
 recipes.get("/filter", async (req, res) => {
-  let { MaxreadyInMinutes, MinreadyInMinutes, servings, title} = req.query;
-  let {diets} = req.body
-  if(!MinreadyInMinutes) MinreadyInMinutes = 0
-  if(!MaxreadyInMinutes) MaxreadyInMinutes = 99999
-  if(!servings) servings = 0
-  if(!title) title = ''
-  
+  let { MaxreadyInMinutes, MinreadyInMinutes, servings, title } = req.query;
+  let { diets } = req.body;
+  if (!MinreadyInMinutes) MinreadyInMinutes = 0;
+  if (!MaxreadyInMinutes) MaxreadyInMinutes = 99999;
+  if (!servings) servings = 0;
+  if (!title) title = "";
+
   try {
-    const filteredRecipies = await functions.getRecipesByFilter( MaxreadyInMinutes, MinreadyInMinutes, servings, title, diets)
-    res.send(filteredRecipies)
+    const filteredRecipies = await functions.getRecipesByFilter(
+      MaxreadyInMinutes,
+      MinreadyInMinutes,
+      servings,
+      title,
+      diets
+    );
+    res.send(filteredRecipies);
   } catch (error) {
     res.status(404).send(error.message);
   }
-})
+});
 
 recipes.get("/:id", async (req, res) => {
-
   const { id } = req.params;
   try {
     const recipe = await functions.getRecipeById(id * 1);
-    res.send(recipe)
+    res.send(recipe);
   } catch (error) {
     res.status(404).send(error.message);
   }
 });
 
 recipes.post("/create", async (req, res) => {
-  const { instructions, number, ingredients, equipments } = req.body
+  const {
+    readyInMinutes,
+    servings,
+    title,
+    image,
+    creditsText,
+    summary,
+    cuisisnes,
+    diets,
+    dishTypes,
+    ocassions,
+    steps,
+  } = req.body;
 
   try {
-    const step = await functions.createStep(instructions, number, ingredients, equipments)
-    res.send(step)
+    const recipe = await functions.createRecipe(
+      readyInMinutes,
+      servings,
+      title,
+      image,
+      creditsText,
+      summary,
+      cuisisnes,
+      diets,
+      dishTypes,
+      ocassions,
+      steps
+    );
+    res.send(recipe);
   } catch (error) {
     res.status(404).send(error.message);
   }
-})
-
-
-
+});
 
 module.exports = recipes;

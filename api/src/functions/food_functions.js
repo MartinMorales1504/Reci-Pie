@@ -368,42 +368,10 @@ const getRecipeById = async (id) => {
   return recipe;
 };
 
-// CREATE STEP (We need to create the steps first so we can include them to the recipe properly)
-// steps = [{
-//   instructions1: 'instructions', 
-//   equipments: [equipment1, equipment2], 
-//   ingredients: [ingredient1, ingredient2]},
-//   ...]
-// Each ingredient/equipment must be its ID
-const createStep = async (instructions, number, ingredients, equipments) => {
-      const newStep = await Step.create({
-        instructions: instructions,
-        number: number,
-      })
-      if(ingredients){
-        ingredients.forEach(async (eachIngredient) => {
-          try {
-            await newStep.addIngredient(eachIngredient);
-          } catch (error) {
-             console.log(error)        
-          }
-        });
-      }
-      if(equipments) {
-        equipments.forEach(async (eachEquipment) => {
-          try {
-            await newStep.addEquipment(eachEquipment);
-          } catch (error) {
-            console.log('equipment', eachEquipment)
-          }
-        });
-      }
 
-      return `Step with id ${newStep.id} created successfully`
-}
 
 // CREATE RECIPE
-const createRecipe = async (readyInMinutes, servings, title, image, creditsText, summary, cuisisnes, diets, dishTypes, ocassion, steps) => {
+const createRecipe = async (readyInMinutes, servings, title, image, creditsText, summary, cuisisnes, diets, dishTypes, ocassions, steps) => {
   const newRecipe = await Recipe.create({
     readyInMinutes: readyInMinutes,
     servings: servings,
@@ -412,6 +380,53 @@ const createRecipe = async (readyInMinutes, servings, title, image, creditsText,
     creditsText: creditsText,
     summary: summary,
   })
+  if(cuisisnes){
+    cuisisnes.forEach(async (cuisine) => {
+      try {
+        await newRecipe.addCuisine(cuisine);
+      } catch (error) {
+         console.log(error)        
+      }
+    });
+  }
+  if(diets){
+    diets.forEach(async (diet) => {
+      try {
+        await newRecipe.addDiet(diet);
+      } catch (error) {
+         console.log(error)        
+      }
+    });
+  }
+  if(dishTypes){
+    dishTypes.forEach(async (dishType) => {
+      try {
+        await newRecipe.addDishType(dishType);
+      } catch (error) {
+         console.log(error)        
+      }
+    });
+  }
+  if(ocassions){
+    ocassions.forEach(async (ocassion) => {
+      try {
+        await newRecipe.addOcassion(ocassion);
+      } catch (error) {
+         console.log(error)        
+      }
+    });
+  }
+  if(steps){
+    steps.forEach(async (step) => {
+      try {
+        await newRecipe.addStep(step);
+      } catch (error) {
+         console.log(error)        
+      }
+    });
+  }
+
+  return newRecipe
 }
 
 
@@ -420,5 +435,5 @@ module.exports = {
   importAllData,
   getRecipeById,
   getRecipesByFilter,
-  createStep
+  createRecipe,
 };
