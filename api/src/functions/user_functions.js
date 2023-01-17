@@ -1,6 +1,6 @@
 const axios = require("axios");
 const { Op } = require("sequelize");
-
+const food_functions = require('./food_functions')
 const {
   Recipe,
   Diet,
@@ -47,7 +47,7 @@ const createUser = async (
   return "Missing data";
 };
 
-// Buscar usuario por ID
+// Buscar usuario por Usuario + Contraseña
 const logInUser = async (email, password) => {
   let user = await User.findOne({
     where: {
@@ -55,6 +55,7 @@ const logInUser = async (email, password) => {
       password: password,
     },
   });
+  return user
 };
 
 module.exports = {

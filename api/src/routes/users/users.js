@@ -23,4 +23,15 @@ users.post("/create", async (req, res) => {
   }
 });
 
+users.get("/login", async (req,res) => {
+  const { email, password } = req.query;
+  
+  try {
+    let user = await functions.logInUser(email, password)
+    res.send(user)
+  } catch (error) {
+    res.status(404).send(error.message);
+  }
+})
+
 module.exports = users;
