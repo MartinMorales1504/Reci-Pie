@@ -113,10 +113,15 @@
         font-size: 14px;
         text-align: center;
         min-width: 80%;
-        padding-bottom: 30px;
+        padding-top: 5px;
+        padding-bottom: 10px;
         margin-bottom: 5px;
         border-bottom: solid #22252754;
         border-width: 1.5px;
+        
+        p{
+          color: #282e33ad;
+        }
       }
     }
   }

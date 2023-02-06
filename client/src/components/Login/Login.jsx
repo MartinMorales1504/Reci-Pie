@@ -4,15 +4,15 @@ import s from './Login.module.scss'
 import { useState } from "react";
 import { useNavigate } from "react-router-dom"
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
-import { motion } from 'framer-motion'
 import Slider from "../Slider/Slider";
+
+import { setUserLocalStorage, getLocalStorage } from "../../handlers/localStorage";
 
 import logo from './assets/Logo.png'
 import foodImg from "./assets/Food.svg"
 import foodImg2 from "./assets/Food2.jpg"
 import foodImg3 from "./assets/Food3.jpg"
 import foodImg4 from "./assets/Food4.jpg"
-import arrow from './assets/Arrow.svg'
 
 
 
@@ -28,6 +28,7 @@ const Login = () => {
 
   const logUser = async (email, password) => {
     let user = await axios.get(`/users/login?email=${email}&password=${password}`)
+    setUserLocalStorage(user)
     console.log(user.data)
   }
 
