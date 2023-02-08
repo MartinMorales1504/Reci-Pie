@@ -47,8 +47,8 @@ const Login = () => {
           <div className={s.forgotPw}>
             <p>Olvidaste tu contraseña?</p>
           </div>
-
           <button className={s.registerButton} onClick={event => navigate('./register')}>Registrarse</button>
+          <span onClick={event => navigate('./explore')}>Explorar Recetas sin Registrarse</span>
         </div>
       </div>
 
@@ -63,7 +63,7 @@ const Login = () => {
         </div>
 
         <div className={s.imgBtnContainer}>
-          <Slider imagenes={images}/>
+          <Slider imagenes={images} />
         </div>
       </div>
     </div>
