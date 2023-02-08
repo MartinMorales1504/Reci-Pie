@@ -2,6 +2,11 @@ import React from "react";
 import axios from "axios"
 import s from './Login.module.scss'
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import Slider from "../Slider/Slider";
+
+import { setUserLocalStorage, getLocalStorage } from "../../handlers/localStorage";
 
 import logo from './assets/Logo.png'
 import foodImg from "./assets/Food.svg"
@@ -9,36 +14,21 @@ import foodImg2 from "./assets/Food2.jpg"
 import foodImg3 from "./assets/Food3.jpg"
 import foodImg4 from "./assets/Food4.jpg"
 
-import arrow from './assets/Arrow.svg'
 
 
 const images = [foodImg, foodImg2, foodImg3, foodImg4]
 
 const Login = () => {
 
-  const [imgIndex, setimgIndex] = useState(0)
+  const navigate = useNavigate()
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const passImgRight = (imgIndex) => {
-    if (!images[imgIndex+1]) {
-      setimgIndex(0)
-    } else {
-      setimgIndex(imgIndex + 1)
-    }
-    return images[imgIndex]
-  }
-
-  const passImgLeft = (imgIndex) => {
-    if(imgIndex === 0) {
-      setimgIndex(images.length - 1) 
-    } else {
-      setimgIndex(imgIndex - 1)
-    }
-  }
 
   const logUser = async (email, password) => {
     let user = await axios.get(`/users/login?email=${email}&password=${password}`)
+    setUserLocalStorage(user)
     console.log(user.data)
   }
 
@@ -57,8 +47,8 @@ const Login = () => {
           <div className={s.forgotPw}>
             <p>Olvidaste tu contraseña?</p>
           </div>
-
-          <button className={s.registerButton}>Registrarse</button>
+          <button className={s.registerButton} onClick={event => navigate('./register')}>Registrarse</button>
+          <span onClick={event => navigate('./explore')}>Explorar Recetas sin Registrarse</span>
         </div>
       </div>
 
@@ -73,11 +63,7 @@ const Login = () => {
         </div>
 
         <div className={s.imgBtnContainer}>
-          <img className={s.leftArrow} src={arrow} alt="arrow" onClick={event => passImgLeft(imgIndex)}/>
-          <div className={s.imgContainer}>
-            <img className={s.foodImg} src={images[imgIndex]} alt="some food"></img>
-          </div>
-          <img className={s.rightArrow} src={arrow} alt="arrow"  onClick={event => passImgRight(imgIndex)}/>
+          <Slider imagenes={images} />
         </div>
       </div>
     </div>

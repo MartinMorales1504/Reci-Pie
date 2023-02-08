@@ -1,0 +1,22 @@
+<svg width="71" height="68" viewBox="0 0 71 68" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g filter="url(#filter0_d_53_3)">
+<ellipse cx="35.1608" cy="30" rx="31.1608" ry="30" fill="#D9D9D9"/>
+<rect x="12.9031" y="51.4286" width="42.8571" height="44.5154" transform="rotate(-90 12.9031 51.4286)" fill="url(#pattern0)"/>
+</g>
+<defs>
+<filter id="filter0_d_53_3" x="0" y="0" width="70.3216" height="68" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="4"/>
+<feGaussianBlur stdDeviation="2"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_53_3"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_53_3" result="shape"/>
+</filter>
+<pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image0_53_3" transform="translate(-0.0193465) scale(0.0103869 0.01)"/>
+</pattern>
+<image id="image0_53_3" width="100" height="100" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAAAXNSR0IArs4c6QAAAXpJREFUeJzt201qwzAQgNHZ9hIl9GbZ9dAtoQfpz6IZSEvi2I5sydZ7oJXBGH0MthaOAAAAAAAAAAAAAJp3OC8a8BwR7xHxEREvlZ+lexnj+7xEqeh/DFEquhVDlAruxRBlRWNjiLKCqTFEWdAhIk5xe9M/z+vW9VM4pxRzbzK+IuI1Io4xHMWkFDA2RhJlQVNjJFEWMDdGEqWgR2MkUQooFSOJ8oDSMZIoMywVI4kywdIxkigjrBUjiTJg7RhJlCtqxUiiXKgdI4kS7cRIXUdpLUbqMkqrMVJXUVqPkbqIspUYaddRthYj7TLKVmOkXUXZeoy0iyh7iZE2HWVvMdImo+w1RtpUlL3HSJuI0kuM1HSU3mKkJqP0GiM1FaX3GKmJKGL8VTWKGNdViSLGsFWjiDHOKlHEmGbRKGLMs0gUMR5TPMpQEDHGGYpSbErEmOZalGLvETHmuYxS7EvrLcR4xDF+/5UvdhZ5KnWjjtlDAAAAAAAAAAAA+AEp68S1McOLFgAAAABJRU5ErkJggg=="/>
+</defs>
+</svg>
